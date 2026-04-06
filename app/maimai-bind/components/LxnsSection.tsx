@@ -2,25 +2,25 @@ import React from 'react';
 import { LXNS_CLIENT_ID, LXNS_AUTHORIZE_URL, OAUTH_CALLBACK_URL } from '../lib/config';
 
 interface LxnsSectionProps {
-  token: string;
+  authCode: string;
   onError: (message: string) => void;
   onBack: () => void;
 }
 
-export function LxnsSection({ token, onError, onBack }: LxnsSectionProps) {
+export function LxnsSection({ authCode, onError, onBack }: LxnsSectionProps) {
   const handleLxnsBind = () => {
-    if (!token) {
-      onError('缺少绑定令牌，请重新从机器人获取链接');
+    if (!authCode) {
+      onError('缺少授权码，请返回上一步重新验证');
       return;
     }
 
-    // 生成 OAuth 授权链接（state 使用 token）
+    // 生成 OAuth 授权链接（state 使用授权码）
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: LXNS_CLIENT_ID,
       redirect_uri: OAUTH_CALLBACK_URL,
       scope: 'read_user_profile write_player read_player read_user_token',
-      state: token
+      state: authCode
     });
 
     window.location.href = `${LXNS_AUTHORIZE_URL}?${params.toString()}`;

@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { API_BASE_URL } from '../lib/config';
 
 interface DivingFishFormProps {
-  token: string;
+  authCode: string;
   onSuccess: (syname: string) => void;
   onError: (message: string) => void;
   onStartSubmit: () => void;
   onBack: () => void;
 }
 
-export function DivingFishForm({ token, onSuccess, onError, onStartSubmit, onBack }: DivingFishFormProps) {
+export function DivingFishForm({ authCode, onSuccess, onError, onStartSubmit, onBack }: DivingFishFormProps) {
   const [divingFishToken, setDivingFishToken] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleDivingFishBind = async () => {
-    if (!token) {
-      onError('缺少绑定令牌，请重新从机器人获取链接');
+    if (!authCode) {
+      onError('缺少授权码，请返回上一步重新验证');
       return;
     }
     if (!divingFishToken.trim()) {
@@ -45,7 +45,7 @@ export function DivingFishForm({ token, onSuccess, onError, onStartSubmit, onBac
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          token,
+          auth_code: authCode,
           source: 'diving_fish',
           syname,
           sytoken,

@@ -216,7 +216,7 @@ function BindSuccessContent() {
             </div>
 
             <div className="text-center text-[11px] text-[#747775] dark:text-[#8E918F]">
-              绑定令牌有效期为 1 小时，请尽快完成绑定
+              绑定信息长期有效，可随时继续完成绑定
             </div>
         </div>
       </Layout>

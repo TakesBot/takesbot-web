@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { MethodSelector } from './components/MethodSelector';
@@ -8,18 +7,16 @@ import { MessageAlert } from './components/MessageAlert';
 import { DivingFishForm } from './components/DivingFishForm';
 import { LxnsSection } from './components/LxnsSection';
 import { Footer } from './components/Footer';
-import { MissingTokenState } from './components/MissingTokenState';
 import { API_BASE_URL } from './lib/config';
 
 type BindStep = 'selection' | 'diving-fish' | 'lxns';
 
 function BindPageContent() {
-  const searchParams = useSearchParams();
-  const token = searchParams.get('token');
   const [currentStep, setCurrentStep] = useState<BindStep>('selection');
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [isHere, setIsHere] = useState(false);
   const [authCodeInput, setAuthCodeInput] = useState('');
+  const [verifiedAuthCode, setVerifiedAuthCode] = useState('');
   const [isAuthVerified, setIsAuthVerified] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
 
@@ -27,10 +24,6 @@ function BindPageContent() {
     const timer = setTimeout(() => setIsHere(true), 50);
     return () => clearTimeout(timer);
   }, []);
-
-  if (!token) {
-    return <MissingTokenState />;
-  }
 
   const handleBack = () => {
     setMessage(null);
@@ -52,7 +45,7 @@ function BindPageContent() {
       const response = await fetch(`${API_BASE_URL}/maimai/bind/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, auth_code: code }),
+        body: JSON.stringify({ auth_code: code }),
       });
 
       const result = await response.json();
@@ -62,6 +55,7 @@ function BindPageContent() {
       }
 
       setIsAuthVerified(true);
+        setVerifiedAuthCode(code.toUpperCase());
       setCurrentStep('selection');
       setMessage({ type: 'success', text: '授权码验证成功，请继续选择绑定方式' });
     } catch (error) {
@@ -133,7 +127,7 @@ function BindPageContent() {
                 {currentStep === 'diving-fish' && (
                   <div className="animate-fade-in-right">
                     <DivingFishForm
-                      token={token}
+                      authCode={verifiedAuthCode}
                       onSuccess={(syname) => setMessage({ type: 'success', text: `绑定成功！玩家名：${syname}` })}
                       onError={(errorMsg) => setMessage({ type: 'error', text: errorMsg })}
                       onStartSubmit={() => setMessage(null)}
@@ -146,7 +140,7 @@ function BindPageContent() {
                 {currentStep === 'lxns' && (
                   <div className="animate-fade-in-right">
                     <LxnsSection
-                      token={token}
+                      authCode={verifiedAuthCode}
                       onError={(errorMsg) => setMessage({ type: 'error', text: errorMsg })}
                       onBack={handleBack}
                     />
