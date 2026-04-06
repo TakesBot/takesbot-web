@@ -151,14 +151,6 @@ function BindSuccessContent() {
                  <br />现在可以返回 QQ 使用了
              </div>
 
-             {/* 授权码备用显示 */}
-             {authCode && (
-                 <div className="bg-[#F0F4FC] dark:bg-[#282A2F] px-4 py-3 rounded-xl mb-6 border border-white/0">
-                     <span className="text-[#747775] dark:text-[#8E918F] text-[10px] block mb-1 uppercase tracking-wider">Debug Auth Code</span>
-                     <span className="font-mono text-xs text-[#1F1F1F] dark:text-[#E2E2E6] break-all select-all">{authCode}</span>
-                 </div>
-             )}
-
              <button
                  onClick={handleClose}
                  className="bg-[#00639B] dark:bg-[#A8C7FA] text-white dark:text-[#003258] px-8 py-3.5 rounded-full text-sm font-medium hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all w-full"
@@ -203,7 +195,7 @@ function BindSuccessContent() {
                      ) : (
                         <>
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                            <span>复制授权码</span>
+                         <span>复制绑定令牌</span>
                         </>
                      )}
                 </button>
@@ -217,15 +209,14 @@ function BindSuccessContent() {
                     <div>
                          <p className="text-xs font-medium mb-1.5 opacity-80">下一步操作</p>
                          <p className="text-sm">
-                            返回 QQ 聊天框 @机器人 发送：<br/>
-                            <code className="bg-[#FFDCBB] dark:bg-[#584424] px-1.5 rounded inline-block mt-1 select-all">/bindlx {authCode}</code>
+                    <span className="bg-[#FFDCBB] dark:bg-[#584424] px-1.5 rounded inline-block mt-1 select-all">请返回绑定页继续完成后续绑定</span>
                          </p>
                     </div>
                 </div>
             </div>
 
             <div className="text-center text-[11px] text-[#747775] dark:text-[#8E918F]">
-                授权码有效期为 10 分钟，请尽快完成绑定
+              绑定令牌有效期为 1 小时，请尽快完成绑定
             </div>
         </div>
       </Layout>
